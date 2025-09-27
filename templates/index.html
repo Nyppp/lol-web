@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>LoL 사용자 설정 게임 팀 매니저</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1>LoL 팀 매니저</h1>
+  
+  <div class="buttons">
+    <button onclick="loadTeams()">멤버 불러오기</button>
+    <button onclick="shuffleTeams()">팀 섞기</button>
+  </div>
+
+  <div class="teams">
+    <div class="team">
+      <h2>1팀</h2>
+      <ul id="team1"></ul>
+    </div>
+    <div class="team">
+      <h2>2팀</h2>
+      <ul id="team2"></ul>
+    </div>
+  </div>
+
+  <script>
+    async function loadTeams() {
+      const res = await fetch('/fetch');
+      const data = await res.json();
+      renderTeams(data);
+    }
+    async function shuffleTeams() {
+      const res = await fetch('/shuffle');
+      const data = await res.json();
+      renderTeams(data);
+    }
+    function renderTeams(data) {
+      const t1 = document.getElementById('team1');
+      const t2 = document.getElementById('team2');
+      t1.innerHTML = '';
+      t2.innerHTML = '';
+      data.team1.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        t1.appendChild(li);
+      });
+      data.team2.forEach(name => {
+        const li = document.createElement('li');
+        li.textContent = name;
+        t2.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
